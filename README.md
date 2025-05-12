@@ -1,6 +1,6 @@
 # Infrastructure Documentation
 
-This is an overview of the infrastructure components used in this project.
+## This is an overview of the infrastructure components used in this project.
 
 ## Components
 
