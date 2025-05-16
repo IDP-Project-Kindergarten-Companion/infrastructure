@@ -1,13 +1,16 @@
 #!/bin/bash
 
 # Array of port forwarding commands
+# now only the mongo-express and kong services are exposed, the rest are exposed with kong
 commands=(
-  "kubectl port-forward svc/activity-log-svc -n kindergarten-app 8084:5003"
-  "kubectl port-forward svc/db-interact-svc -n kindergarten-app 8082:5000"
-  "kubectl port-forward svc/child-profile-svc -n kindergarten-app 8083:5002"
+  # "kubectl port-forward svc/activity-log-svc -n kindergarten-app 8084:5003"
+  # "kubectl port-forward svc/db-interact-svc -n kindergarten-app 8082:5000"
+  # "kubectl port-forward svc/child-profile-svc -n kindergarten-app 8083:5002"
+  # "kubectl port-forward svc/auth-svc -n kindergarten-app 8081:5051"
   "kubectl port-forward svc/mongo-express-auth-svc -n kindergarten-app 8501:8081"
   "kubectl port-forward svc/mongo-express-op-svc -n kindergarten-app 8502:8081"
-  "kubectl port-forward svc/auth-svc -n kindergarten-app 8081:5051" # Added auth-svc port forwarding
+  "kubectl port-forward svc/portainer -n portainer 9443:9443"
+  "kubectl port-forward svc/kong-kong-proxy -n kong 8000:80"
 )
 
 # Array to store process IDs (PIDs)

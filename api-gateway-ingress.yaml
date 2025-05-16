@@ -1,0 +1,57 @@
+# Acest fișier YAML definește un obiect Ingress.
+# Salvează-l ca de exemplu: deployment/k8s/networking/api-gateway-ingress.yaml
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kindergarten-app-ingress
+  namespace: kindergarten-app # Asigură-te că este în același namespace cu serviciile tale
+  annotations:
+    # Specifică Kong ca Ingress Controller.
+    # Pentru versiuni mai noi de Kong, 'konghq.com/strip-path: 'true'' poate fi necesar
+    # dacă vrei ca prefixul căii (ex: /auth) să NU fie trimis la serviciul backend.
+    # Depinde de cum sunt definite rutele în aplicațiile tale Flask.
+    # Dacă rutele Flask încep direct (ex: @app.route('/login')), atunci strip-path: 'true' e bun.
+    # Dacă rutele Flask includ prefixul (ex: @app.route('/auth/login')), atunci strip-path: 'false' sau omiți.
+    kubernetes.io/ingress.class: kong 
+    # konghq.com/strip-path: 'true' # Decomentează și ajustează dacă este necesar
+
+spec:
+  rules:
+  - http:
+      paths:
+      # --- Rute pentru Auth Service ---
+      - path: /auth # Orice request către kong-ip/auth/...
+        pathType: Prefix # Prefix înseamnă că /auth/login, /auth/register etc. vor fi prinse
+        backend:
+          service:
+            name: auth-svc # Numele serviciului Kubernetes pentru auth-service
+            port:
+              number: 5051 # Portul pe care auth-svc expune serviciul în cluster
+
+      # --- Rute pentru Child Profile Service ---
+      - path: /profiles # Orice request către kong-ip/profiles/...
+        pathType: Prefix
+        backend:
+          service:
+            name: child-profile-svc # Numele serviciului Kubernetes
+            port:
+              number: 5002 # Portul serviciului child-profile-svc
+
+      # --- Rute pentru Activity Log Service ---
+      - path: /log # Orice request către kong-ip/log/... (pentru POST)
+        pathType: Prefix
+        backend:
+          service:
+            name: activity-log-svc # Numele serviciului Kubernetes
+            port:
+              number: 5003 # Portul serviciului activity-log-svc
+      
+      - path: /activities # Orice request către kong-ip/activities (pentru GET)
+        pathType: Prefix
+        backend:
+          service:
+            name: activity-log-svc
+            port:
+              number: 5003
+
