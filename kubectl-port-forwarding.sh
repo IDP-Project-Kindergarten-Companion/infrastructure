@@ -10,6 +10,7 @@ commands=(
   "kubectl port-forward svc/mongo-express-auth-svc -n kindergarten-app 8501:8081"
   "kubectl port-forward svc/mongo-express-op-svc -n kindergarten-app 8502:8081"
   "kubectl port-forward svc/portainer -n portainer 9443:9443"
+  "kubectl port-forward svc/kong-kong-admin -n kong 8001:8001"
   "kubectl port-forward svc/kong-kong-proxy -n kong 8000:80"
 )
 
