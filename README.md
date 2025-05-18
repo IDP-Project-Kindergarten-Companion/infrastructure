@@ -19,3 +19,10 @@ kubectl --namespace monitoring port-forward $POD_NAME 3000
 # Run the port-forwarding script for api gateway, portainer, and mongo express
 bash kubectl-port-forwarding.sh
 ```
+
+#### Services and ports:
+- **Grafana**: Port 3000
+- **API Gateway**: Port 8000
+- **Portainer**: Port 9443
+- **Mongo Express Auth**: Port 8501
+- **Mongo Express Operational**: Port 8502
